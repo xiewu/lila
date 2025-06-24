@@ -38,9 +38,29 @@ export function initModule(args: { fn: string } & any): void {
       return titleRequest();
     case 'validEmail':
       return validateEmail();
+    case 'relayForm':
+      return relayForm();
     default:
       console.error('Unknown bits function', args.fn);
   }
+}
+
+function relayForm() {
+  wireCropDialog({
+    aspectRatio: 2 / 1,
+    post: { url: $('.relay-image-edit').attr('data-post-url')!, field: 'image' },
+    selectClicks: $('.select-image, .drop-target'),
+    selectDrags: $('.drop-target'),
+  });
+
+  const $source = $('#form3-syncSource'),
+    showSource = () =>
+      $('.relay-form__sync').each(function (this: HTMLElement) {
+        this.classList.toggle('none', !this.classList.contains(`relay-form__sync-${$source.val()}`));
+      });
+
+  $source.on('change', showSource);
+  showSource();
 }
 
 function appeal() {
